@@ -14,58 +14,45 @@ function shuffleArray(array) {
     return array.sort((a, b) => Math.random() - 0.5);
 }
 
-
-
 // TODO 1
-
 function getMultipleChoices(n, correctAnswer, array) {
-    let choices = []; // Start with the correct answer in the choices array
-    choices.push(correctAnswer); //always push the correct answers
-    while (choices.length < numberOfChoices) {
-        const randomChoice = getRandomElement(array); // Keep looping until we have enough choices
+    let choices = [correctAnswer]
 
-        // Only add if not already included
-        if (!choices.includes(randomChoice)) {
-            choices.push(randomChoice);
+    while (choices.length < n) {
+        const randomOption = getRandomElement(array)
+
+        if (!choices.includes(randomOption)) {
+            choices.push(randomOption)
         }
     }
-    return choices;
+
+    return shuffleArray(choices)
+
 }
-
-
 
 
 // TODO 2
-// Given a URL such as "https://images.dog.ceo/breeds/poodle-standard/n02113799_2280.jpg"
-// return the breed name string as formatted in the breed list, e.g. "standard poodle"
 function getBreedFromURL(url) {
-     const [, , , , breedString] = url.split("/");
-    const breedParts = breedString.split("-");
-    if (breedParts.length === 1) {
-        return breedParts[0];
-    }
-    const [breed, subBreed] = breedParts;
-    return `${subBreed} ${breed}`;
-        
+    const [, , , , breedName] = url.split('/')
+    const [firstName, lastName] = breedName.split('-')
 
+    return [lastName, firstName].join(" ")
 }
 
 
-
 // TODO 3
-    async function fetchMessage(url) {
-    const response = await fetch(url);
-    const data = await response.json();
+async function fetchMessage(url) {
+    const response = await fetch(url)
+    const body = await response.json()
 
-    return data.message;
+    return body.message
+
 }
 
 
 // Function to add the multiple-choice buttons to the page
 function renderButtons(choicesArray, correctAnswer) {
 
-    // Event handler function to compare the clicked button's value to correctAnswer
-    // and add "correct"/"incorrect" classes to the buttons as appropriate
     function buttonHandler(e) {
         if (e.target.value === correctAnswer) {
             e.target.classList.add("correct");
@@ -77,21 +64,20 @@ function renderButtons(choicesArray, correctAnswer) {
 
     const options = document.getElementById("options"); // Container for the multiple-choice buttons
 
-    // TODO 4
-    options.replaceChildren();
-
-    choicesArray.forEach(choice => {
+    choicesArray.forEach((choice) => {
         const button = document.createElement("button");
+
+
+
         button.name = choice;
         button.value = choice;
-        button.textContent = choice;
+        button.textContent = choice
 
-        button.addEventListener("click", buttonHandler);
-        options.appendChild(button);
-    });
+        button.addEventListener("click", buttonHandler)
 
+        options.appendChild(button)
+    })
 }
-
 
 // Function to add the quiz content to the page
 function renderQuiz(imgUrl, correctAnswer, choices) {
@@ -113,13 +99,17 @@ async function loadQuizData() {
 
     const doggoImgUrl = await fetchMessage(RANDOM_IMG_ENDPOINT);
     const correctBreed = getBreedFromURL(doggoImgUrl);
-    const breedChoices = getMultipleChoices(3, correctBreed, BREEDS);
+    const breedChoices = getMultipleChoices(2, correctBreed, BREEDS);
 
     return [doggoImgUrl, correctBreed, breedChoices];
 }
 
 // TODO 5
-function loadQuiz() {
-    console.log("Loading quiz...");
-    setTimeout(() => { renderQuiz(...loadQuizData()) }, 1000); // Simulate a delay in loading the quiz data
+// Asynchronously call the loadQuizData() function,
+async function startQuiz() {
+    const [imageUrl, correctAnswer, choices] = await loadQuizData()
+    // Then call renderQuiz() with the returned imageUrl, correctAnswer, and choices
+    renderQuiz(imageUrl, correctAnswer, choices);
 }
+
+startQuiz()
