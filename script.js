@@ -44,8 +44,15 @@ function getBreedFromURL(url) {
     // The string method .split(char) may come in handy
     // Try to use destructuring as much as you can
 
+    const [, , , , breedString] = url.split("/");
+    const breedParts = breedString.split("-");
+    if (breedParts.length === 1) {
+        return breedParts[0];
+    }
+    const [breed, subBreed] = breedParts;
+    return `${subBreed} ${breed}`;
+        
 }
-
 
 
 // TODO 3
