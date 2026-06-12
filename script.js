@@ -39,8 +39,14 @@ function getMultipleChoices(n, correctAnswer, array) {
 // Given a URL such as "https://images.dog.ceo/breeds/poodle-standard/n02113799_2280.jpg"
 // return the breed name string as formatted in the breed list, e.g. "standard poodle"
 function getBreedFromURL(url) {
-    // The string method .split(char) may come in handy
-    // Try to use destructuring as much as you can
+     const [, , , , breedString] = url.split("/");
+    const breedParts = breedString.split("-");
+    if (breedParts.length === 1) {
+        return breedParts[0];
+    }
+    const [breed, subBreed] = breedParts;
+    return `${subBreed} ${breed}`;
+        
 
 }
 
