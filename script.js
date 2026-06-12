@@ -97,7 +97,7 @@
     }
 
     // TODO 5
-    // Asynchronously call the loadQuizData() function,     
-    // Then call renderQuiz() with the returned imageUrl, correctAnswer, and choices 
-    
-    
+    function loadQuiz() {
+  console.log("Loading quiz...");
+  setTimeout(() => {renderQuiz(...loadQuizData())}, 1000); // Simulate a delay in loading the quiz data
+    }
