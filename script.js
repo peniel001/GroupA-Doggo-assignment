@@ -47,11 +47,11 @@ function getBreedFromURL(url) {
 
 
 // TODO 3
-// Given a URL, fetch the resource at that URL, 
-// then parse the response as a JSON object,
-// finally return the "message" property of its body
-async function fetchMessage(url) {
+    async function fetchMessage(url) {
+    const response = await fetch(url);
+    const data = await response.json();
 
+    return data.message;
 }
 
 
@@ -72,10 +72,17 @@ function renderButtons(choicesArray, correctAnswer) {
     const options = document.getElementById("options"); // Container for the multiple-choice buttons
 
     // TODO 4
-    // For each of the choices in choicesArray,
-    // Create a button element whose name, value, and textContent properties are the value of that choice,
-    // attach a "click" event listener with the buttonHandler function,
-    // and append the button as a child of the options element
+    options.replaceChildren();
+
+    choicesArray.forEach(choice => {
+        const button = document.createElement("button");
+        button.name = choice;
+        button.value = choice;
+        button.textContent = choice;
+
+        button.addEventListener("click", buttonHandler);
+        options.appendChild(button);
+    });
 
 }
 
